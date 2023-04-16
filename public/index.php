@@ -2,26 +2,27 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Config\DbInitializer;
+use APP\Config\ExceptionHandlerInitializer;
 use Symfony\Component\Dotenv\Dotenv;
 
-set_exception_handler(function (Throwable $e){
-    http_response_code(500);
-    echo json_encode([
-        'error' => 'Une erreur est survenue',
-        'code' => $e->getCode()
-    ]);
-});
+header('content-type: application/json; charset=UTF-8');
+
 
 $dotenv = new Dotenv();
 $dotenv->loadEnv('.env');
 
-$dsn = "mysql:host=" . $_ENV['DB_HOST'] . 
-    ";port=" . $_ENV['DB_PORT'] . 
-    ";dbname=" . $_ENV['DB_NAME'] .
-    ";charset=" . $_ENV['DB_CHARSET'];
+ExceptionHandlerInitializer::registerGlobalExeptionHandler();
+$pdo = DbInitializer::getPdoInstance();
 
-$pdo = new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASS']);
+$uri = $_SERVER['REQUEST_URI'];
+$httpMethod = $_SERVER['REQUEST_METHOD'];
 
-var_dump($pdo);
+if ($uri === '/meubles'&& $httpMethod === 'GET'){
+    $stmt = $pdo->query("SELECT * FROM meubles");
+    $meubles = $stmt->fetchAll();
+}
 
+if ($uri === '/meubles'&& $httpMethod === 'POST'){
 
+}
