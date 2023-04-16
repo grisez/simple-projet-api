@@ -13,7 +13,6 @@ class ElectroniqueCrud
 
     public function create(array $data): int
     {
-        // Vérifie que les données obligatoires sont présentes
         $requiredFields = ['e_nom', 'e_prix'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
@@ -42,7 +41,6 @@ class ElectroniqueCrud
 
     public function find(int $id, string $resourceName, string $isItemOperation, string $httpMethod): ?array
     {
-        // Vérifie si c'est une opération sur un élément unique de la ressource "electronique" et si la méthode est "GET"
         if ($resourceName === 'electronique' && $isItemOperation && $httpMethod === 'GET') {
             $query = "SELECT * FROM electronique WHERE e_id = :id";
             $stmt = $this->pdo->prepare($query);
