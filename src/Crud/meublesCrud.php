@@ -13,7 +13,6 @@ class MeublesCrud
 
     public function create(array $data): int
     {
-        // Vérifie que les données obligatoires sont présentes
         $requiredFields = ['m_nom', 'm_prix'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
@@ -42,7 +41,6 @@ class MeublesCrud
 
     public function find(int $id, string $resourceName, string $isItemOperation, string $httpMethod): ?array
     {
-        // Vérifie si c'est une opération sur un élément unique de la ressource "meubles" et si la méthode est "GET"
         if ($resourceName === 'meubles' && $isItemOperation && $httpMethod === 'GET') {
             $query = "SELECT * FROM meubles WHERE m_id = :id";
             $stmt = $this->pdo->prepare($query);
