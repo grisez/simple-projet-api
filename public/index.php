@@ -5,7 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Config\DbInitializer;
 use App\Config\ExceptionHandlerInitializer;
 use App\Crud\Exception\UnprocessableContentException;
-use App\Crud\meublesCrud;
+use App\Crud\MeublesCrud;
 use Symfony\Component\Dotenv\Dotenv;
 
 header('content-type: application/json; charset=UTF-8');
@@ -23,11 +23,11 @@ const RESOURCES = ['meubles'];
 
 $uriParts = explode('/', $uri);
 $isItemOperation = count($uriParts) === 3;
-$productsCrud = new meublesCrud($pdo);
+$productsCrud = new MeublesCrud($pdo);
 
 // Collection de produits
 if ($uri === '/meubles' && $httpMethod === 'GET') {
-    echo json_encode($meublesCrud->findAll());
+    echo json_encode($MeublesCrud->findAll());
     exit;
 }
 
@@ -35,7 +35,7 @@ if ($uri === '/meubles' && $httpMethod === 'GET') {
 if ($uri === '/meubles' && $httpMethod === 'POST') {
     try {
         $data = json_decode(file_get_contents('php://input'), true);
-        $meubleId = $meublesCrud->create($data);
+        $meubleId = $MeublesCrud->create($data);
         http_response_code(201);
         echo json_encode([
             'uri' => '/meubles/' . $meubleId
@@ -58,7 +58,6 @@ if (!$isItemOperation) {
     ]);
     exit;
 }
-
 
 $resourceName = $uriParts[1];
 $id = intval($uriParts[2]);
